@@ -1,100 +1,45 @@
 import * as THREE from 'three';
-import { VRButton } from 'three/addons/webxr/VRButton.js';
+// import { VRButton } from 'three/addons/webxr/VRButton.js';
+import { ARButton } from 'three/examples/jsm/webxr/ARButton.js';
+import { setupSimulation, updateSimulation } from './src/scene';
 
-// Scene Setup
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x111111);
-scene.fog = new THREE.FogExp2(0xffffff, 0.02);
+// Set up camera
+const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.01, 5000 );
+camera.position.set( 0, 2, 5 );
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 3, 10);
-
+// Set up renderer
 const renderer = new THREE.WebGLRenderer();
 renderer.xr.enabled = true;
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setAnimationLoop( animate ); // Start running animation loop
 
 // Append DOM elements
 document.body.appendChild( renderer.domElement );
-document.body.appendChild( VRButton.createButton( renderer ) );
+// document.body.appendChild( VRButton.createButton( renderer ) );
+document.body.appendChild( ARButton.createButton( renderer ) );
 
-// Add Light
-const spotLight = new THREE.SpotLight(0xffffff, 10, 50, Math.PI / 4, 0.3);
-spotLight.position.set(0, 10, 5);
-spotLight.target.position.set(0, 0, 0);
-scene.add(spotLight);
-scene.add(spotLight.target);
 
-// Add Visible Object
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-const material = new THREE.MeshStandardMaterial({ color: 0xffaa00 });
-const sphere = new THREE.Mesh(geometry, material);
-sphere.position.set(0, 1, 0);
-scene.add(sphere);
+//
+const scene = new THREE.Scene();
+scene.background = null;
+// const sphere = setupSimulation( scene );
+const particles = setupSimulation( scene );
 
-// if (navigator.xr) {
-//     const session = await navigator.xr.requestSession( "immersive-ar", {
-//         requiredFeatures: [ "plane-detection" ]
-//     } ).then( (session) => {
-//         console.log( 'Depth sensing enabled:', session );
-//     } );    
-// }
-
-// const session = await navigator.xr.requestSession('immersive-ar', {
-//     requiredFeatures: ['mesh-detection']
-// }).then((session) => {
-//     console.log('Scene Understanding Enabled!', session);
-// });
-
-// Animate
 function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-}
-animate();
-
-if ("xr" in window.navigator) {
-    /* WebXR can be used! */
-    console.log("a");
-} else {
-    /* WebXR isn't available */
-    console.log("b");
+    // requestAnimationFrame( animate ); // ??
+    // updateSimulation( sphere );
+    updateSimulation( particles );
+    renderer.render( scene, camera );
 }
 
-try {
-    const supported = await navigator.xr.isSessionSupported('immersive-ar');
+navigator.xr.isSessionSupported('immersive-ar').then(supported => {
     if (supported) {
-        const session = await navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['plane-detection'] })
-            .catch(() => console.warn("Plane detection not supported on this device."));
-        if (session) {
-            console.log("XR session with plane detection started.");
-        }
-    } else {
-        console.warn("XR immersive AR not supported on this device.");
+        navigator.xr.requestSession('immersive-ar', {
+            requiredFeatures: ['plane-detection']
+        }).then(session => {
+            renderer.xr.setSession(session);
+        }).catch(err => {
+            console.warn("Feature not supported:", err);
+        });
     }
-} catch (err) {
-    console.error("Error checking XR support:", err);
-}
-
-// async function checkXRSupport() {
-//     if (navigator.xr) {
-//         try {
-//             const supported = await navigator.xr.isSessionSupported('immersive-ar');
-//             if (supported) {
-//                 const session = await navigator.xr.requestSession('immersive-ar', { requiredFeatures: ['plane-detection'] })
-//                     .catch(() => console.warn("Plane detection not supported on this device."));
-//                 if (session) {
-//                     console.log("XR session with plane detection started.");
-//                 }
-//             } else {
-//                 console.warn("XR immersive AR not supported on this device.");
-//             }
-//         } catch (err) {
-//             console.error("Error checking XR support:", err);
-//         }
-//     } else {
-//         console.warn("WebXR not supported in this browser.");
-//     }
-// }
-
-// // Call this function in response to a user action (e.g., button click)
-// document.getElementById("startXR").addEventListener("click", checkXRSupport);
+});
