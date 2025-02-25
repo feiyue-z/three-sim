@@ -10,8 +10,12 @@ export default class Particle extends THREE.Mesh {
             velocity = 0,
         } = options;
 
-        const geometry = new THREE.SphereGeometry( radius );
-        const material = new THREE.MeshBasicMaterial( { color } );
+        const geometry = new THREE.SphereGeometry( radius, 32, 32 );
+        const material = new THREE.MeshStandardMaterial( {
+            color,
+            roughness: 0.5,
+            metalness: 0,
+        } );
         
         super( geometry, material );
         this.position.set( ...position );
