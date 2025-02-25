@@ -6,6 +6,7 @@ const dt = 0.016;   // Time step (~60 FPS)
 const bounce = -0.3;
 
 let particles = [];
+let plane;
 
 function setupSimulation( scene ) {
     // Create particles
@@ -22,7 +23,7 @@ function setupSimulation( scene ) {
     // Ground plane
     const planeGeometry = new THREE.PlaneGeometry( 10, 10 );
     const planeMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00, side: THREE.DoubleSide } );
-    const plane = new THREE.Mesh( planeGeometry, planeMaterial );
+    plane = new THREE.Mesh( planeGeometry, planeMaterial );
     plane.rotation.x = -Math.PI / 2;
     plane.position.y = -1;
     // scene.add( plane );
@@ -40,8 +41,9 @@ function updateSimulationVR() {
         p.position.y += p.velocity * dt;
     
         // Collision detection
-        if ( p.position.y <= -0.95 ) {
-            p.position.y = -0.95;
+        const threshold = plane.position.y + p.offset;
+        if ( p.position.y <= threshold ) {
+            p.position.y = threshold;
             p.velocity *= bounce;
         }
     } );
@@ -56,11 +58,15 @@ function updateSimulationXR( plane, pose ) {
         p.position.y += p.velocity * dt;
     
         // Collision detection
-        const y = getPlaneHeightAtXZ( plane, pose, p.position.x, p.position.z );
-        if ( y != null && p.position.y <= y + 0.05 ) {
-            p.position.y = y + 0.05;
-            p.velocity = 0;
-            hit++;
+        const height = getPlaneHeightAtXZ( plane, pose, p.position.x, p.position.z );
+        if ( height ) {
+            const threshold = height + p.offset;
+
+            if ( p.position.y <= threshold ) {
+                p.position.y = threshold;
+                p.velocity *= bounce;
+                hit++;
+            }
         }
     } );
 

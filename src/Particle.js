@@ -20,5 +20,6 @@ export default class Particle extends THREE.Mesh {
         super( geometry, material );
         this.position.set( ...position );
         this.velocity = velocity;
+        this.offset = radius;
     }
 }
