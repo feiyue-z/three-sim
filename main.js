@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { XRButton } from 'three/examples/jsm/Addons.js';
-// import { XRPlanes } from 'three/examples/jsm/Addons.js';
 import { setupSimulation, updateSimulationVR, updateSimulationXR } from './src/Simulation';
 import GradientSkydome from './src/GradientSkydome';
 
@@ -9,7 +8,6 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 camera.position.set( 0, 2, 5 );
 
 // Set up renderer
-// const renderer = new THREE.WebGLRenderer();
 const renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.xr.enabled = true;
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -26,16 +24,8 @@ document.body.appendChild( XRButton.createButton(
 
 //
 const scene = new THREE.Scene();
-// scene.background = null;
 const skydome = new GradientSkydome();
 scene.add( skydome );
-
-// const light = new THREE.AmbientLight();
-// scene.add( light );
-
-// const light = new THREE.PointLight( 0xffffff, 1 );
-// light.position.set( 1, 1, 1 );
-// scene.add( light );
 
 const light = new THREE.DirectionalLight( 0xffffff, 1 );
 light.position.set( 1, 1, 1 );
@@ -45,8 +35,6 @@ const particles = setupSimulation( scene );
 let simulationEnabled = true;
 
 function animateVR() {
-    // requestAnimationFrame( animate ); // ??
-    
     if ( simulationEnabled ) {
         updateSimulationVR();
     }
@@ -67,7 +55,6 @@ renderer.xr.addEventListener('sessionstart', () => {
 } );
 
 function setupXRSession( session ) {
-    // Set up the render loop
     renderer.setAnimationLoop( ( timestamp, frame ) => {
         if ( frame && simulationEnabled ) {
             onXRFrame( timestamp, frame );

@@ -8,6 +8,7 @@ const bounce = -0.3;
 let particles = [];
 
 function setupSimulation( scene ) {
+    // Create particles
     for ( let x = 0; x < 10; x++ ) {
         for (let z = 0; z < 10; z++ ) {
             let p = new Particle( {
