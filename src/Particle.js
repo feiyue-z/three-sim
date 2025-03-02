@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 export default class Particle extends THREE.Mesh {
     constructor( options = {} ) {
-        // Default options that can be overridden
         const {
             position = [0, 0, 0],
             radius = 0.05,
@@ -19,7 +18,27 @@ export default class Particle extends THREE.Mesh {
         
         super( geometry, material );
         this.position.set( ...position );
-        this.velocity = velocity;
         this.offset = radius;
+        this.color = color;
+        this.velocity = velocity;
+        this.boundingSphere = new THREE.Sphere( this.position, radius );
+        this.frustumCulled = false;
+    }
+
+    updateColor( newColor ) {
+        this.material.color.set( newColor );     
+    }
+
+    resetColor() {
+        this.material.color.set( this.color );
+    }
+
+    collidesWith( rectangle ) {
+        if ( !this.boundingSphere || !rectangle.boundingBox ) {
+            console.warn( "Bounding volumes are undefined!" );
+            return false;
+        }
+
+        return this.boundingSphere.intersectsBox( rectangle.boundingBox );
     }
 }
