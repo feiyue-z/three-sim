@@ -23,6 +23,9 @@ export default class Particle extends THREE.Mesh {
         this.velocity = velocity;
         this.boundingSphere = new THREE.Sphere( this.position, radius );
         this.frustumCulled = false;
+        this.userData = {
+            type: "particle"
+        };
     }
 
     updateColor( newColor ) {
