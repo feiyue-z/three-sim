@@ -84,7 +84,7 @@ export function handleControllerSelectMove( controller ) {
 
 export function createLaserBeam( controller ) {
     const material = new THREE.LineBasicMaterial( { color: 0xff0000 } ); // Red beam
-    const points = [ new THREE.Vector3( 0, 0, 0), new THREE.Vector3( 0, 0, -1) ]; // Start & end
+    const points = [ new THREE.Vector3( 0, 0, 0 ), new THREE.Vector3( 0, 0, -1 ) ]; // Start & end
     const geometry = new THREE.BufferGeometry().setFromPoints( points );
     const laser = new THREE.Line( geometry, material );
 

@@ -69,7 +69,7 @@ class TextMesh extends THREE.Object3D {
         const {
             color = 0x000000,
             size = 0.2,
-            depth = 0.02
+            depth = 0.01
         } = options;
 
         if ( !loadedFont)  {
@@ -113,10 +113,14 @@ class TextMesh extends THREE.Object3D {
 }
 
 class Board extends RoundedRectangle {
-    constructor( width, height, text ) {
+    constructor( width, height, text, options = {} ) {
+        const {
+            size = 0.2
+        } = options;
+
         super( width, height, 0.2 );
 
-        this.textMesh = new TextMesh( text );
+        this.textMesh = new TextMesh( text, { size: size } );
         this.textMesh.position.set( 0, 0, 0.1 );
         this.textMesh.raycast = () => {};
         this.add( this.textMesh );
@@ -172,18 +176,28 @@ class MinusButton extends RoundedRectangle {
 export function createControlPanel() {
     const controlPanel = new THREE.Group();
 
-    const board = new Board(2, 1, "g = 9.8" );
-    const addButton = new AddButton( 0.4, 0.4 );
-    const minusButton = new MinusButton( 0.4, 0.4 );
+    const gravityBoard = new Board( 2, 0.8, "g = 9.8" );
+    const tutorialBoard = new Board(
+        3,
+        1.5,
+        "• WASD to move camera\n• Use mouse or controller\n   to drag and drop\n• Squeeze to switch AR/VR",
+        { size: 0.15 }
+    );
+    const addButton = new AddButton( 0.5, 0.5 );
+    const minusButton = new MinusButton( 0.5, 0.5 );
 
-    board.name = "board";
+    gravityBoard.name = "board";
     addButton.name = "addButton";
     minusButton.name = "minusButton";
 
-    addButton.position.set( 1.3, 0, 0 );
-    minusButton.position.set( -1.3, 0, 0 );
+    tutorialBoard.position.set( -4, 0, -1 );
+    tutorialBoard.rotateY( Math.PI / 8 );
+    
+    addButton.position.set( 1.4, 0, 0 );
+    minusButton.position.set( -1.4, 0, 0 );
 
-    controlPanel.add( board );
+    controlPanel.add( gravityBoard );
+    controlPanel.add( tutorialBoard );
     controlPanel.add( addButton );
     controlPanel.add( minusButton );
 

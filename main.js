@@ -67,7 +67,7 @@ function init() {
     const laser = createLaserBeam( controller );
     laser.visible = true;
 
-
+    // Load font file
     preloadFont().then( () => {
         ////
         // Set up control panel
