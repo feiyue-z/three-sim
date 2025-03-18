@@ -14,7 +14,6 @@ export function preloadFont() {
             ( font ) => {
                 loadedFont = font;
                 resolve( font );
-                console.log("loaded!")
             },
             undefined,
             ( error ) => reject( error )
@@ -72,7 +71,7 @@ class TextMesh extends THREE.Object3D {
             depth = 0.01
         } = options;
 
-        if ( !loadedFont)  {
+        if ( !loadedFont )  {
             console.error( "Font not loaded!" );
             return;
         }
@@ -147,7 +146,7 @@ class AddButton extends RoundedRectangle {
 
     onClick( board ) {
         states.g += 1;
-        board.setText( `g = ${states.g.toFixed(1)}` );
+        board.setText( `g = ${ states.g.toFixed( 1 ) }` );
     }
 }
 
@@ -168,7 +167,7 @@ class MinusButton extends RoundedRectangle {
     onClick( board ) {
         if ( states.g > 1) {
             states.g -= 1;
-            board.setText( `g = ${states.g.toFixed(1)}` );
+            board.setText( `g = ${ states.g.toFixed( 1 ) }` );
         }
     }
 }

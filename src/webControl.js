@@ -67,7 +67,7 @@ export function initWebControl( camera, clickables, controlPanel ) {
                 mouseSelectedObject.resetColor();
             }
     
-            mouseSelectedObject = null;   
+            mouseSelectedObject = null;
             states.simulationEnabled = true;
         }
     } );

@@ -3,7 +3,7 @@ import { XRButton } from 'three/examples/jsm/Addons.js';
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js';
 
 import { setupSimulation, updateSimulationVR, updateSimulationXR, resetParticleHeight } from './src/simulation';
-import GradientSkydome from './src/gradientSkydome';
+import { GradientSkydome, skydomeAnimate } from './src/gradientSkydome';
 import { createControlPanel, preloadFont } from './src/ui';
 import { initWebControl, onKeyDown } from './src/webControl';
 import { initVrControl, createLaserBeam, handleControllerSelectMove } from './src/vrControl';
@@ -93,6 +93,7 @@ function init() {
 function setupWebSession( session ) {
     renderer.setAnimationLoop( ( timestamp, frame ) => {
         if ( states.simulationEnabled ) {
+            skydomeAnimate();
             updateSimulationVR();
         }
 

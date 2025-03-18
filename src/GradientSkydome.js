@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 
-export default function GradientSkydome() {
+let mesh;
+
+export function GradientSkydome() {
     const geometry = new THREE.SphereGeometry( 1000, 32, 32 );
 
     const vs = `
-        // precision mediump float;
-
         varying vec2 vUv;
 
         void main() {
@@ -15,8 +15,6 @@ export default function GradientSkydome() {
     `;
 
     const fs = `
-        // precision mediump float;
-
         uniform vec2 iResolution;
         uniform float iTime;
         varying vec2 vUv;
@@ -69,8 +67,12 @@ export default function GradientSkydome() {
         side: THREE.BackSide // Render the inside of the sphere
     } );
 
-    const mesh = new THREE.Mesh( geometry, material );
+    mesh = new THREE.Mesh( geometry, material );
     mesh.position.set( 0, 0, 0 );
 
     return mesh;
+}
+
+export function skydomeAnimate() {
+    mesh.material.uniforms.iTime.value = performance.now() * 0.0005;
 }
