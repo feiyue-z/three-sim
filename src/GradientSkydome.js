@@ -40,10 +40,10 @@ export function GradientSkydome() {
             // Light source positions
             vec2 pos = 0.4 * sin(iTime * 0.5 + vec2(0.0, 11.0)) * cos(iTime * 0.5 * 0.618);
             
-            // Red light
-            vec3 light1 = 1.0 / (1.0 + length(suv + pos) * vec3(1.0, 5.0, 9.0));
-            // Blue light
-            vec3 light2 = 1.0 / (1.0 + length(suv - pos) * vec3(9.0, 5.0, 1.0));
+            // Pink light
+            vec3 light1 = 1.0 / (1.0 + length(suv + pos) * vec3(0.2, 0.5, 0.2));
+            // Yellow light
+            vec3 light2 = 1.0 / (1.0 + length(suv - pos) * vec3(1.0, 1.0, 8.0));
             
             // Linear color values
             vec3 lin1 = gamma_decode(light1, GAMMA);
@@ -74,5 +74,5 @@ export function GradientSkydome() {
 }
 
 export function skydomeAnimate() {
-    mesh.material.uniforms.iTime.value = performance.now() * 0.0005;
+    mesh.material.uniforms.iTime.value = performance.now() * 0.001;
 }
