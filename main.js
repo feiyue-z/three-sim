@@ -24,6 +24,7 @@ function init() {
     camera.position.set( 0, 2, 3 );
 
     renderer.xr.enabled = true;
+    renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     setupWebSession(); // Start running animation loop
 
