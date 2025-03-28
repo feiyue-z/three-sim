@@ -21,7 +21,7 @@ function init() {
     // Set up camera & renderer
     ////
 
-    camera.position.set( 0, 2, 5 );
+    camera.position.set( 0, 2, 3 );
 
     renderer.xr.enabled = true;
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -66,6 +66,15 @@ function init() {
     // Attach laser beam to controller
     const laser = createLaserBeam( controller );
     laser.visible = true;
+
+    // Listen to resize event
+    window.addEventListener( 'resize', () => {
+        // material.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    } );
 
     // Load font file
     preloadFont().then( () => {
